@@ -1,9 +1,9 @@
 /***********************************************************************
-* Program:
-*    Lesson 08, Tic-Tac-Toe
-* Summary: 
-*    This program reads, displays, and writes a Tic-Tac-Toe board
-************************************************************************/
+ * Program:
+ *    Lesson 08, Tic-Tac-Toe
+ * Summary:
+ *    This program reads, displays, and writes a Tic-Tac-Toe board
+ ************************************************************************/
 
 #include <iostream>
 #include <fstream>
@@ -33,43 +33,56 @@ int main()
    cout << "Enter source filename: ";
    cin  >> fileName;
 
+
    ifstream fin(fileName);
    if (fin.fail()){
-      cout << "fin fail";
       return false;
    }
+
+
+
    if (!read(board, fileName, fin))
    {
       cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
       return 1;
    }
    // display the board
+   if (!fin.fail()){
    cout << "Level 1:\n";
    display(board);
    cout << "\n";
 
-
-   if (!read(board, fileName, fin))
-   {
-      cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
-      return 1;
    }
+   
+   if (!fin.fail()){
+      if (!read(board, fileName, fin))
+      {
+         cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
+         return 1;
+      }
+   }
+   if (!fin.fail()){
    cout << "Level 2:\n";
    display(board);
    cout << "\n";
-
-
-   if (!read(board, fileName, fin))
-   {
-      cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
-      return 1;
    }
+
+
+   if (!fin.fail()){
+      if (!read(board, fileName, fin))
+      {
+         cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
+         return 1;
+      }
+   }
+   if (!fin.fail()){
    cout << "Level 3:\n";
    display(board);
    cout << "\n";
-
-   fin.close();
+   }
    
+   fin.close();
+
    // write the board to a file
    cout << "Enter destination filename: ";
    cin  >> fileName;
@@ -79,7 +92,7 @@ int main()
       return 1;
    }
 
-   
+
    return 0;
 }
 
@@ -92,24 +105,24 @@ bool read(char board[][SIZE], const char* fileName, ifstream& fin)
    assert(*fileName);
 
    // open the file
-//   ifstream fin(fileName);
-//   if (fin.fail())
-//      return false;
+   //   ifstream fin(fileName);
+   if (fin.fail())
+      return false;
 
    // read 9 symbols, hopefully they are . X O
    for (int r = 0; r < SIZE; r++)
       for (int c = 0; c < SIZE; c++)
       {
          fin >> board[r][c];
-         assert(!fin.fail());
-         assert(board[r][c] == PLAYER1 ||
-                board[r][c] == PLAYER2 ||
-                board[r][c] == EMPTY);
+         //assert(!fin.fail());
+         //assert(board[r][c] == PLAYER1 ||
+         //       board[r][c] == PLAYER2 ||
+         //       board[r][c] == EMPTY);
       }
 
-   
+
    // close the file
-//   fin.close();
+   //   fin.close();
    return true;
 }
 
@@ -169,7 +182,7 @@ void display(const char board[][SIZE])
       cout << PLAYER1 << " won!\n";
    if (didWin(board, PLAYER2))
       cout << PLAYER2 << " won!\n";
-   
+
    return;
 }
 
@@ -184,7 +197,7 @@ bool didWin(const char board[][SIZE], char turn)
    //checking if the horizontal line is success
    for (int row = 0; row < SIZE; row++){
       count = 0;
-      
+
       for (int col = 0; col < SIZE; col++){
          if (board[row][col] == turn)
             count++;
@@ -199,7 +212,7 @@ bool didWin(const char board[][SIZE], char turn)
    //checking if the vertical line is success
    for (int col = 0; col < SIZE; col++){
       count = 0;
-      
+
       for (int row = 0; row < SIZE; row++){
          if (board[row][col] == turn)
             count++;
@@ -230,17 +243,17 @@ bool didWin(const char board[][SIZE], char turn)
    //checking if the diagonal line is success (from right to left diagonal)
    count = 0;
    for (int i = 0; i < SIZE; i++){
-      for (int j = SIZE - 1; j >= 0; j--){
+      int j = SIZE - 1 - i;
          if (board[i][j] == turn)
             count++;
-      }
+
    }
    if (count == SIZE){
       cout << "turn " << turn << " has won!\n";
       return true;
    }
 
-   
+
    //if you got nothing
    return false;
 }
