@@ -17,7 +17,7 @@ using namespace std;
 #define SIZE 3
 
 bool read(         char board[][SIZE], const char* fileName, ifstream& fin);
-bool write(  const char board[][SIZE], const char* fileName);
+bool write(  const char board[][SIZE], const char* fileName, ofstream& fout);
 void display(const char board[][SIZE]);
 bool didWin( const char board[][SIZE], char turn);
 
@@ -26,7 +26,9 @@ bool didWin( const char board[][SIZE], char turn);
  ***********************************************************************/
 int main()
 {
-   char board[SIZE][SIZE];
+   char board1[SIZE][SIZE];
+   char board2[SIZE][SIZE];
+   char board3[SIZE][SIZE];
 
    // read the board
    char fileName[256];
@@ -41,7 +43,7 @@ int main()
 
 
 
-   if (!read(board, fileName, fin))
+   if (!read(board1, fileName, fin))
    {
       cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
       return 1;
@@ -49,13 +51,13 @@ int main()
    // display the board
    if (!fin.fail()){
    cout << "Level 1:\n";
-   display(board);
+   display(board1);
    cout << "\n";
 
    }
    
    if (!fin.fail()){
-      if (!read(board, fileName, fin))
+      if (!read(board2, fileName, fin))
       {
          cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
          return 1;
@@ -63,13 +65,13 @@ int main()
    }
    if (!fin.fail()){
    cout << "Level 2:\n";
-   display(board);
+   display(board2);
    cout << "\n";
    }
 
 
    if (!fin.fail()){
-      if (!read(board, fileName, fin))
+      if (!read(board3, fileName, fin))
       {
          cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
          return 1;
@@ -77,7 +79,7 @@ int main()
    }
    if (!fin.fail()){
    cout << "Level 3:\n";
-   display(board);
+   display(board3);
    cout << "\n";
    }
    
@@ -86,13 +88,36 @@ int main()
    // write the board to a file
    cout << "Enter destination filename: ";
    cin  >> fileName;
-   if (!write(board, fileName))
+
+   ofstream fout(fileName);
+   if (fout.fail())
+      return false;
+   if (!write(board1, fileName, fout))
    {
       cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
       return 1;
    }
 
+   
+   if (!fout.fail()){
+      if (!write(board2, fileName, fout))
+      {
+         cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
+         return 1;
+      }
+   }
 
+   if (!fout.fail()){
+      if (!write(board3, fileName, fout))
+      {
+         cout << "ERROR: Unable to open file \"" << fileName << "\"\n";
+         return 1;
+      }
+   }
+
+
+
+   fout.close();
    return 0;
 }
 
@@ -130,12 +155,12 @@ bool read(char board[][SIZE], const char* fileName, ifstream& fin)
  * WRITE
  * Write to fileName the board data
  *********************************************************/
-bool write(const char board[][SIZE], const char* fileName)
+bool write(const char board[][SIZE], const char* fileName, ofstream& fout)
 {
    assert(fileName[0] != '\0');
 
    // open the file
-   ofstream fout(fileName);
+//   ofstream fout(fileName);
    if (fout.fail())
       return false;
 
@@ -145,7 +170,7 @@ bool write(const char board[][SIZE], const char* fileName)
          fout << board[r][c] << (c == 2 ? '\n' : ' ');
 
    // close it!
-   fout.close();
+   //fout.close();
    cout << "File written\n";
    return true;
 }
