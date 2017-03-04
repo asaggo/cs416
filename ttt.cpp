@@ -210,7 +210,7 @@ bool didWin(const char board[][SIZE], char turn)
       }
    }
 
-   //checking if the diagonal line is success
+   //checking if the diagonal line is success (from left to right)
    count = 0;
    for (int row = 0; row < SIZE; row++){
       for (int col = 0; col < SIZE; col++){
@@ -226,6 +226,21 @@ bool didWin(const char board[][SIZE], char turn)
       return true;
    }
 
+
+   //checking if the diagonal line is success (from right to left diagonal)
+   count = 0;
+   for (int i = 0; i < SIZE; i++){
+      for (int j = SIZE - 1; j >= 0; j--){
+         if (board[i][j] == turn)
+            count++;
+      }
+   }
+   if (count == SIZE){
+      cout << "turn " << turn << " has won!\n";
+      return true;
+   }
+
+   
    //if you got nothing
    return false;
 }
